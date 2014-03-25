@@ -1,9 +1,9 @@
 MSAN 622 Data Visualization
 ==============================
 
-| **Name**  | [YOUR NAME] |
+| **Name**  | Ashley Cox |
 |----------:|:------------|
-| **Email** | [USERNAME]@dons.usfca.edu |
+| **Email** | amcox@dons.usfca.edu |
 
 ## About Me ##
 
