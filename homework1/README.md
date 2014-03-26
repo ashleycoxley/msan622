@@ -1,5 +1,5 @@
 Homework 1: Basic Charts
-==============================
+========================
 
 | **Name**  | Ashley Cox |
 |----------:|:-------------|
@@ -11,4 +11,13 @@ Run R code.
 
 ## Discussion ##
 
-[DISCUSSION: Include a discussion here if required by the assignment.]
+![](hw1-scatter.png)
+
+
+![](hw1-bar.png)
+
+
+![](hw1-multiples.png)
+
+
+![](hw1-multiline.png)
