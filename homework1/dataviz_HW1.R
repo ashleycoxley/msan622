@@ -5,7 +5,6 @@ library(stringr)
 data(movies)
 data(EuStockMarkets)
 
-
 # Data transformations
 filtered <- movies[which(movies$budget != 0 & movies$budget != 'NA'),]
 
@@ -29,6 +28,48 @@ eu <- transform(data.frame(EuStockMarkets), time = time(EuStockMarkets))
 eu$time <- unclass(eu$time)
 melted_eu <- melt(eu, id=c('time'), measured=c('DAX', 'SMI', 'CAC', 'FTSE'))
 
+
+# Plot 1
+million_dollar_fmt <- function(x) {
+  return(sprintf("$%dM", round(x / 1000000)))
+}
+
+plot1 <- ggplot(filtered, aes(x=budget, y=rating, group=genre, color=genre)) + 
+  geom_jitter() +
+  ggtitle("Movie Ratings by Budget") +
+  xlab("Budget") +
+  ylab("Rating") +
+  scale_x_continuous(labels = million_dollar_fmt) +
+  scale_colour_brewer(name = "Genre", type='qual', palette=3) +
+  ggsave(file='hw1-scatter.png', height=6, width=9)
+
+# Plot 2
+plot2 <- ggplot(filtered, aes(genre, fill=genre)) +
+  geom_bar() +
+  ggtitle("Genre Frequency in Movies Dataset") +
+  scale_fill_brewer(type='qual', palette=3) +
+  theme(legend.position="none") +
+  theme(axis.title.x = element_blank()) +
+  theme(axis.title.y = element_blank()) +
+  theme(axis.ticks.x = element_blank()) +
+  scale_y_continuous(expand=c(0, 25)) +
+  theme(panel.grid.major.x = element_blank()) +
+  ggsave(file='hw1-bar.png', height=6, width=9)
+
+# Plot 3
+plot3 <- ggplot(filtered, aes(x=budget, y=rating, color=genre)) + 
+  geom_jitter() +
+  ggtitle("Movie Ratings by Genre") +
+  xlab("Budget") +
+  ylab("Rating") +
+  scale_x_continuous(labels = million_dollar_fmt) +
+  scale_colour_brewer(name = "Genre", type='qual', palette=3) +
+  theme(axis.text.x = element_text(angle=35, hjust=1, vjust=1)) +
+  theme(legend.position="none") +
+  facet_wrap(~genre) +
+  ggsave(file='hw1-multiples.png', height=6, width=9)
+
+# Plot 4
 # Get euro-sign format for EU price graph, taken from Stack Overflow:
 # http://stackoverflow.com/questions/11935797/euro-sign-in-ggplot-scales-package
 euro_format <- function(largest_with_cents = 100000) {
@@ -45,46 +86,12 @@ euro_format <- function(largest_with_cents = 100000) {
   }
 }
 
-# Plot 1
-plot1 <- ggplot(filtered, aes(x=budget, y=rating, group=genre, color=genre)) + 
-  plotgeom_jitter() +
-  ggtitle("Movie Ratings by Budget") +
-  xlab("Budget") +
-  ylab("Movie Rating") +
-  scale_x_continuous(labels = dollar_format()) +
-  scale_colour_brewer(name = "Genre", type='qual', palette=3) +
-  ggsave(file='hw1-scatter.png', height=6, width=9)
-  
-
-# Plot 2
-plot2 <- ggplot(filtered, aes(genre, fill=genre)) +
-  geom_bar() +
-  ggtitle("Genre Frequency in Movies Dataset") +
-  xlab("Genre") +
-  ylab("Number of Movies") +
-  scale_fill_brewer(name = "Genre", type='qual', palette=3) +
-  theme(legend.position="none") +
-  ggsave(file='hw1-bar.png', height=6, width=9)
-
-# Plot 3
-plot3 <- ggplot(filtered, aes(x=budget, y=rating, color=genre)) + 
-  geom_jitter() +
-  ggtitle("Movie Ratings by Genre") +
-  xlab("Budget") +
-  ylab("Movie Rating") +
-  scale_x_continuous(labels = dollar_format()) +
-  scale_colour_brewer(name = "Genre", type='qual', palette=3) +
-  theme(axis.text.x = element_text(angle=35, hjust=1, vjust=1)) +
-  theme(legend.position="none") +
-  facet_wrap(~genre) +
-  ggsave(file='hw1-multiples.png', height=6, width=9)
-
-# Plot 4
 plot4 <- ggplot(melted_eu, aes(x=time, y=value, group=variable, color=variable)) + 
   geom_line() +
   ggtitle("EU Stock Prices") +
-  xlab("Year") +
-  ylab("Price") +
+  xlab('Year') +
+  theme(axis.title.y = element_blank()) +
+  theme(legend.position=c(.1, .8)) +
   scale_y_continuous(labels = euro_format()) +
   scale_colour_brewer(name='Symbol', type='div', palette=1) +
   ggsave(file='hw1-multiline.png', height=6, width=9)
