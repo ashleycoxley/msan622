@@ -4,16 +4,6 @@ shinyUI(
   pageWithSidebar(
     headerPanel("IMDB Ratings"),
     sidebarPanel(
-      selectInput(
-        "sortColumn",
-        "Sort By:",
-        choices = c("Genre", "Count")
-      ),
-      checkboxInput(
-        "sortDecreasing",
-        "Decreasing",
-        FALSE
-      ),
       radioButtons(
         "showRating",
         "MPAA Rating:",
@@ -27,7 +17,7 @@ shinyUI(
       selectInput(
         "colorChoice",
         "Color Scheme",
-        choices = c("Default","Accent", "Set1", "Set2", "Set3", "Dark2", "Pastel1","Pastel2")
+        choices = c("Default","Accent", "Set 1", "Set 2", "Set 3", "Dark 2", "Pastel 1","Pastel 2")
       ),
       sliderInput(
         inputId = 'alpha',

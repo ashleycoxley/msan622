@@ -46,14 +46,20 @@ getPlot <- function(localFrame, showRating, showGenres, colorChoice, alphaChoice
   
   if (length(showGenres) > 0) {
     localFrame <- localFrame[which(localFrame$genre %in% showGenres),]
-    print(head(localFrame))
   }
   
+  maxrange <- max(localFrame$budget)/1000 + 1000
+  
   localPlot <- ggplot(localFrame, aes(x=budget, y=rating, color=mpaa)) +
+    geom_point() +
     ggtitle("Movie Budgets vs. Ratings") +
     xlab("Budget") +
     ylab("Rating") +
-    geom_point(size=sizeChoice, alpha=alphaChoice)
+    scale_x_continuous(
+                      label = thousand_formatter, 
+                       expand = c(0, 2000000)) +
+    scale_y_continuous(limits = c(0, 10), 
+                       expand = c(0, 0.25))
   
   mpaas <- levels(localFrame$mpaa)[2:5]
   
@@ -104,15 +110,7 @@ shinyServer(function(input, output) {
         if (input$sortColumn == "Genre") {
           return(
             order(
-              localFrame$Genres,
-              decreasing = input$sortDecreasing
-            )
-          )
-        }
-        else {
-          return(
-            order(
-              localFrame$Counts,
+              localFrame$genre,
               decreasing = input$sortDecreasing
             )
           )
@@ -122,7 +120,7 @@ shinyServer(function(input, output) {
   
   output$table <- renderTable(
       {
-        return(localFrame[sortOrder(), ])
+        return(localFrame)
       },
       include.rownames = FALSE
   )
