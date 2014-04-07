@@ -32,36 +32,40 @@ loadData <- function() {
 }
 
 # Label formatter for numbers in thousands.
-thousand_formatter <- function(x) {
-  return(sprintf("%dk", round(x / 1000)))
+million_formatter <- function(x) {
+  return(sprintf("$%dM", round(x / 1000000)))
 }
 
 # Create plotting function.
-getPlot <- function(localFrame, showRating, showGenres, colorChoice, alphaChoice, sizeChoice) {
-  print(head(localFrame))
+getPlot <- function(localFrame, showRating, showGenres, colorChoice, alphaChoice, sizeChoice, yearChoice) {
   if (showRating != 'All'){
     localFrame <- localFrame[which(localFrame$mpaa==showRating), ]
-    print(head(localFrame))
   }
   
   if (length(showGenres) > 0) {
     localFrame <- localFrame[which(localFrame$genre %in% showGenres),]
   }
   
-  maxrange <- max(localFrame$budget)/1000 + 1000
+  localFrame <- localFrame[localFrame$year >= yearChoice[1] & localFrame$year <= yearChoice[2], ]
+  
+  if(nrow(localFrame) == 0){
+    return(print("No data to display"))
+  }
   
   localPlot <- ggplot(localFrame, aes(x=budget, y=rating, color=mpaa)) +
-    geom_point() +
-    ggtitle("Movie Budgets vs. Ratings") +
+    geom_point(size=sizeChoice, alpha=alphaChoice) +
     xlab("Budget") +
     ylab("Rating") +
-    scale_x_continuous(
-                      label = thousand_formatter, 
-                       expand = c(0, 2000000)) +
-    scale_y_continuous(limits = c(0, 10), 
-                       expand = c(0, 0.25))
-  
+    scale_x_continuous(label = million_formatter,
+                       limits = c(0, 200000000)) +
+    scale_y_continuous(limits = c(0, 10),
+                       breaks = seq(0, 10, 2)) +
+    theme(legend.position=c(.9, .2)) +
+    theme(axis.ticks.x = element_blank()) +
+    theme(axis.ticks.y = element_blank()) 
+
   mpaas <- levels(localFrame$mpaa)[2:5]
+  all_mpaas <- levels(localFrame$mpaa)[which(levels(localFrame$mpaa)!='')]
   
   if (colorChoice == "Pastel 1") {
     paletteChoice <- brewer_pal(type = "qual", palette = 'Pastel1')(length(mpaas))
@@ -90,7 +94,7 @@ getPlot <- function(localFrame, showRating, showGenres, colorChoice, alphaChoice
   }
   
   all_mpaas <- levels(localFrame$mpaa)[which(levels(localFrame$mpaa)!='')]
-  localPlot <- localPlot + scale_color_manual(values = paletteChoice, name = 'MPAA Rating')
+  localPlot <- localPlot + scale_color_manual(values = paletteChoice, name = 'MPAA Rating', limits = mpaas)
   return(localPlot)
 }
 
@@ -105,22 +109,9 @@ shinyServer(function(input, output) {
   
   localFrame <- globalData
   
-  sortOrder <- reactive(
-    {
-        if (input$sortColumn == "Genre") {
-          return(
-            order(
-              localFrame$genre,
-              decreasing = input$sortDecreasing
-            )
-          )
-        }
-    }
-  )
-  
   output$table <- renderTable(
       {
-        return(localFrame)
+        return(data.frame(localFrame[,1:6], localFrame[,17:24]))
       },
       include.rownames = FALSE
   )
@@ -133,7 +124,8 @@ shinyServer(function(input, output) {
         input$showGenres,
         input$colorChoice,
         input$alphaChoice,
-        input$sizeChoice
+        input$sizeChoice,
+        input$yearChoice
       )
     print(scatterPlot)
     }
