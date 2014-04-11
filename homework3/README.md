@@ -41,7 +41,7 @@ I chose to highlight the way illiteracy is correlated with murder and life expec
 + State labels can be toggled on and off.
 
 ### Parallel Coordinates Plot ###
-![](para.png)
+![](parallel.png)
 + Shows differences in population, life expectancy, murder rate, and high school graduation rate. Lines are colored by region as in the other plots.
 + Added another brushing technique in which the user can select a region to highlight.
 + Formatted the plot to stretch the lines from far left to far right on the plot (removed edge cushion space).
