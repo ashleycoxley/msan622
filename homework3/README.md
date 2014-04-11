@@ -15,12 +15,13 @@ The following packages must be installed prior to running this code:
 - `GGally`
 
 To run this code, please enter the following commands in R:
-
-- `library(shiny)` 
-- `library(scales)` 
-- `library(ggplot2)` 
-- `library(GGally)` 
-- `shiny::runGitHub('msan622', 'ashleycoxley', subdir = 'homework3')`
+```
+library(shiny)
+library(scales) 
+library(ggplot2)
+library(GGally)
+shiny::runGitHub('msan622', 'ashleycoxley', subdir = 'homework3')
+```
 
 ## Discussion ##
 
