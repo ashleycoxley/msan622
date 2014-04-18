@@ -26,7 +26,7 @@ To clean the data, I used the `tm` package to lower-case all the words, remove p
 In this plot, we visualize the difference between relative frequencies of words in the two Aldridge texts I chose. I made some aesthetic changes with axis labels and tick marks, but otherwise the standard options looked appealing. 
 
 ### Word Cloud ###
-![](word_cloud.png)
+![](wordcloud.png)
 
 This word cloud visualizes the most common words in both books. The font size corresponds to word frequency, so that the largest words are the ones seen most frequently. While it is less easy to accurately compare word frequencies, it does give a good big-picture overview of the words used in the books. While there is no real lie factor at play here (the font sizes capture frequency), the difficulty in distinguishing relative sizes makes this graph essentially have somewhat of a large lie factor. In regard to showing us something about the books: compared to current children's books, the words seem plain.
 
