@@ -2,11 +2,13 @@
 data(Seatbelts)
 times <- time(Seatbelts)
 years <- floor(times)
+months <- factor(month.abb[cycle(times)],levels = month.abb,ordered = TRUE)
 
 belts <- transform(data.frame(Seatbelts), time = time(Seatbelts))
 belts$time <- unclass(belts$time)
 belts$year <- unclass(years)
-melted_belts <- melt(belts, id=c('time', 'year'))
+belts$month <- months
+melted_belts <- melt(belts, id=c('time', 'year', "month"))
 
 
 
@@ -46,6 +48,7 @@ plotOverview <- function(data, window) {
   p <- p + theme(axis.title = element_blank())
   p <- p + theme(panel.grid = element_blank())
   p <- p + theme(panel.background = element_blank())
+  p <- p + geom_vline(x = 1983, color =  "red", size = 1)
   
   return(p)
 }
@@ -98,15 +101,35 @@ plotArea <- function(data, window) {
           panel.grid.minor.x = element_blank(),
           #panel.grid.major.y = element_blank(),
           panel.grid.minor.y = element_blank()) +
-    scale_fill_brewer(name="sumthin",
-                      type="qual",
+    scale_fill_brewer(type="qual",
                       palette=6,
                       labels=c("Injury", "Death")
                       )
+  if (xmin <= 1983 && 1983 <= xmax){
+    plot <- plot + geom_vline(x = 1983, color = "black", size = 1)
+  }
 
   return(plot)
 }
 
+plotStar <- function(data, vars){
+  plot <- ggplot(subset(data, variable == vars), 
+                   aes(x=month, 
+                       y=value,
+                       group=year,
+                       color = variable
+                   )
+         ) +
+    geom_line() +
+    facet_wrap(~ year, ncol=4) +
+    coord_fixed(ratio = 1 / 1000) +
+    coord_polar() +
+    theme(axis.title.y = element_blank(),
+          axis.title.x = element_blank(),
+          legend.position = "None")
+  
+  return(plot)
+}
 
 shinyServer(function(input, output) {
   
@@ -124,6 +147,13 @@ shinyServer(function(input, output) {
                              input$window
                              )
     print(overview)
+  })
+  
+  output$starPlot <- renderPlot({
+    star <- plotStar(melted_belts,
+                     input$vars
+                     )
+    print(star)
   })
 })
 

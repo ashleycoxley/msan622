@@ -12,9 +12,14 @@ shinyUI(
                         step = 1,
                         ticks = TRUE,
                         format = "####"
-                        )
+                        ),
+                     h5("Vertical line denotes seatbelt law going into effect")
                       ),
-    conditionalPanel(condition="input.conditionedPanels==2"
+    conditionalPanel(condition="input.conditionedPanels==2",
+                     radioButtons(
+                       "vars",
+                       "Variables: ",
+                       choices = c("Driver Injuries" = "drivers", "Driver Deaths" = "DriversKilled"))
                      ),
     
     width = 3
@@ -36,8 +41,13 @@ shinyUI(
                  height = "200px"
                )
       ), 
-      tabPanel("Plot 2", 
-               value=2
+      tabPanel("Star Plot", 
+               value=2,
+               plotOutput(
+                 outputId = "starPlot",
+                 width = "90%",
+                 height = "600px"
+                 )
       ),
       id = "conditionedPanels"
     ),
