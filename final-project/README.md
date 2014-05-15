@@ -55,6 +55,13 @@ For my final project, I scraped craigslist Free postings in an attempt to find s
 
 ## Interactivity ##
 
+Throughout these plots, the interactivity offered is mainly filtering. In the Item Histogram, the user can filter word frequencies by region. In the Item Density Map, the user can select a word at a time, which is a type of narrowed filtering. In the Item Ratios plot, the filtering is done by two words at a time. Since my plots are so simple, my interactivity is more directed than exploratory: I expect for the user to find one specific type of insight from interacting with each plot. I prefer this type of interactivity as I tend to get overwhelmed and miss the point of a plot with too many intaractive options.
+
+
 ## Prototype Feedback ##
 
+In the prototype feedback section, I got lots of positive response to static plots I had created. I did get two suggestions to make word clouds, but as I don't care for that type of visualization, I elected not to include it. I also had the suggestion to make a clear story with my visualizations, which I think I have achieved.
+
 ## Challenges ##
+
+Many aspects of this project were challenging for me. I have little experience with HTML, so the initial acquisition of the data was somewhat challenging in itself. I also have never worked with shapefiles before, so plotting and merging shapefiles proved to be an interesting challenge, as well. In fact, most of the difficulty in creating my final project resulted from cleaning and manipulating the data (not necessarily making it into a visualization). As mentioned above, the difficulties posed in getting granular population data proved too great.
